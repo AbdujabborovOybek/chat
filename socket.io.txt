@@ -1,0 +1,138 @@
+# Socket.IO va Express.js da ishlatiladigan metodlar
+
+## 1. `const io = require('socket.io')(server, options);`
+Bu metod `socket.io` serverini yaratish uchun ishlatiladi. Unga Express serveri va konfiguratsiya opsiyalari beriladi.
+
+**Misol:**
+```javascript
+const express = require('express');
+const http = require('http');
+const socketIo = require('socket.io');
+
+const app = express();
+const server = http.createServer(app);
+const io = socketIo(server);
+```
+
+---
+
+## 2. `io.on('connection', (socket) => {...})`
+Bu metod har bir yangi mijoz ulanganida ishga tushadi.
+
+**Misol:**
+```javascript
+io.on('connection', (socket) => {
+    console.log('Foydalanuvchi ulandi: ' + socket.id);
+});
+```
+
+---
+
+## 3. `socket.on('eventName', (data) => {...})`
+Mijoz tomonidan yuborilgan ma'lumotlarni olish uchun ishlatiladi.
+
+**Misol:**
+```javascript
+socket.on('chat message', (msg) => {
+    console.log('Yangi xabar: ' + msg);
+});
+```
+
+---
+
+## 4. `socket.emit('eventName', data)`
+Mijozga hodisani (event) jo'natish uchun ishlatiladi.
+
+**Misol:**
+```javascript
+socket.emit('welcome', 'Xush kelibsiz!');
+```
+
+---
+
+## 5. `io.emit('eventName', data)`
+Barcha ulanishlarga ma'lumot yuborish uchun ishlatiladi.
+
+**Misol:**
+```javascript
+io.emit('chat message', 'Bu umumiy xabar!');
+```
+
+---
+
+## 6. `socket.broadcast.emit('eventName', data)`
+Xabardan tashqari barcha mijozlarga ma'lumot yuboradi.
+
+**Misol:**
+```javascript
+socket.broadcast.emit('new user', 'Yangi foydalanuvchi qo'shildi!');
+```
+
+---
+
+## 7. `socket.join('roomName')`
+Foydalanuvchini ma'lum bir xonaga qo'shish uchun ishlatiladi.
+
+**Misol:**
+```javascript
+socket.join('chatRoom');
+```
+
+---
+
+## 8. `socket.leave('roomName')`
+Foydalanuvchini xonadan chiqarish uchun ishlatiladi.
+
+**Misol:**
+```javascript
+socket.leave('chatRoom');
+```
+
+---
+
+## 9. `io.to('roomName').emit('eventName', data)`
+Muayyan xona ichidagi barcha foydalanuvchilarga xabar yuborish.
+
+**Misol:**
+```javascript
+io.to('chatRoom').emit('chat message', 'Xona ichidagi xabar');
+```
+
+---
+
+## 10. `socket.disconnect()`
+Mijozni uzish uchun ishlatiladi.
+
+**Misol:**
+```javascript
+socket.disconnect();
+```
+
+---
+
+## 11. `socket.on('disconnect', () => {...})`
+Mijoz uzilganida ishlatiladi.
+
+**Misol:**
+```javascript
+socket.on('disconnect', () => {
+    console.log('Foydalanuvchi uzildi');
+});
+```
+
+---
+
+## 12. `io.sockets.sockets`
+Hozirda ulangan barcha mijozlarni olish uchun ishlatiladi.
+
+**Misol:**
+```javascript
+const clients = io.sockets.sockets;
+console.log(clients);
+```
+
+---
+
+## Xulosa
+Yuqoridagi metodlar **Socket.IO** va **Express.js** bilan real vaqt rejimida ishlovchi dasturlar yaratishda keng qo'llaniladi. Har bir metod mijozlar bilan qanday ishlashni va ularni boshqarish imkonini beradi.
+
