@@ -17,4 +17,15 @@ app.set("io", io);
 app.use("/api/auth", router.auth);
 socketService(io);
 
+app.get("/ping", (req, res) => res.send("pong"));
+app.use((req, res) => {
+  res.status(404).json({
+    status: {
+      code: 404,
+      message: "Not Found",
+    },
+    message: `The route ${req.url} does not exist`,
+  });
+});
+
 server.listen(PORT, () => console.log(`Server running on port ${PORT}`));
