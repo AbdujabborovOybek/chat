@@ -4,7 +4,24 @@
   "main": "server.js",
   "scripts": {
     "start": "node ./src/server.js",
-    "dev": "nodemon ./src/server.js"
+    "dev": "nodemon ./src/server.js",
+    "pm2": "pm2 start ./src/server.js --name chat --watch",
+    "pm2:stop": "pm2 stop sms-service",
+    "pm2:delete": "pm2 delete sms-service",
+    "pm2:logs": "pm2 logs sms-service",
+    "pm2:status": "pm2 status sms-service",
+    "pm2:restart": "pm2 restart sms-service",
+    "pm2:save": "pm2 save",
+    "pm2:startup": "pm2 startup",
+    "pm2:unstartup": "pm2 unstartup",
+    "pm2:dump": "pm2 dump",
+    "pm2:reload": "pm2 reload sms-service",
+    "pm2:reset": "pm2 reset sms-service",
+    "pm2:describe": "pm2 describe sms-service",
+    "pm2:monit": "pm2 monit",
+    "pm2:prettylist": "pm2 prettylist",
+    "pm2:prettydump": "pm2 prettydump",
+    "pm2:prettyprint": "pm2 prettyprint"
   },
   "keywords": [],
   "author": "",
@@ -20,6 +37,7 @@
     "express": "^4.21.2",
     "jsonwebtoken": "^9.0.2",
     "mysql2": "^3.12.0",
+    "pm2": "^5.4.3",
     "redis": "^4.7.0",
     "socket.io": "^4.8.1",
     "uuid": "^11.0.5"
