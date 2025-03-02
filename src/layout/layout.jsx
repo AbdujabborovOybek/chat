@@ -6,6 +6,9 @@ import { useEffect, useState } from "react";
 export const Layout = () => {
   const socket = io("https://chat.abdujabborov.uz/", {
     transports: ["websocket"],
+    auth: {
+      user_id: JSON.parse(localStorage.getItem("user"))?.id || null,
+    },
   });
   const [users, setUsers] = useState(null);
   const navigate = useNavigate();
@@ -17,6 +20,11 @@ export const Layout = () => {
 
   const openChat = (id) => {
     navigate(`/chat/${id}`);
+  };
+
+  const logout = () => {
+    localStorage.removeItem("user");
+    navigate("/login");
   };
 
   return (
@@ -41,7 +49,9 @@ export const Layout = () => {
             </li>
           ))}
         </ol>
-        <button className="logout">Chiqish</button>
+        <button className="logout" onClick={logout}>
+          Chiqish
+        </button>
       </aside>
       <section>
         <Outlet />
