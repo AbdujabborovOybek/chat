@@ -13,7 +13,7 @@ export const Layout = () => {
   useEffect(() => {
     socket.emit("users");
     socket.on("users", (users) => setUsers(users));
-  }, [socket]);
+  }, []);
 
   const openChat = (id) => {
     navigate(`/chat/${id}`);

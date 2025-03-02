@@ -12,23 +12,30 @@ export const Chat = () => {
   const user = JSON.parse(localStorage.getItem("user"));
   const [room, setRoom] = useState(null);
 
-  // const [messages, setMessages] = useState(null);
+  const [messages, setMessages] = useState(null);
 
   useEffect(() => {
     const chatOptions = { from: user.id, to: id };
     socket.emit("get_room", chatOptions);
     socket.on("get_room", (room) => setRoom(room));
+
+    socket.emit("get_messages", room);
+    socket.on("get_messages", (messages) => setMessages(messages));
   }, [id, user.id]);
 
-  console.log("room");
-  console.log(room);
-  console.log("room");
+  console.log(messages);
 
   const handleSendMessage = (e) => {
     e.preventDefault();
     const message = e.target.message.value;
-    console.log(message);
+    if (!message) return;
 
+    const messageOptions = {
+      chat_id: room,
+      message,
+      from_user_id: user.id,
+    };
+    socket.emit("send_message", messageOptions);
     e.target.reset();
   };
 

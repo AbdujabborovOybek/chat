@@ -17,6 +17,7 @@ export const Router = () => {
       <Route path="/" element={<Layout />}>
         <Route element={<Auth />}>
           <Route index element={<Profile />} />
+          <Route path="/chat" element={<Chat />} />
           <Route path="/chat/:id" element={<Chat />} />
         </Route>
       </Route>
