@@ -8,8 +8,7 @@ const socket = (io) => {
       io.emit("users", users);
     });
 
-    // get messages from chat
-    client.on("get_messages", async (data) => {
+    client.on("get_room", async (data) => {
       const { from = null, to = null } = data;
       if (!from && !to) return;
 
@@ -24,13 +23,23 @@ const socket = (io) => {
         };
 
         await mysql.query("INSERT INTO chats SET ?", set);
-        io.to(set.id).emit("get_messages", null);
+        client.join(set.id);
+        client.emit("get_room", set.id);
       }
 
-      sql = `SELECT * FROM messages WHERE chat_id = ? ORDER BY created_at ASC`;
-      const messages = await mysql.query(sql, [chat[0].id]);
+      client.join(chat[0].id);
+      client.emit("get_room", chat[0].id);
+    });
 
-      io.to(chat[0].id).emit("get_messages", messages);
+    // get messages from chat
+    client.on("get_messages", async (data) => {
+      const { room_id = null } = data;
+      if (!room_id) return;
+
+      let sql = `SELECT * FROM messages WHERE chat_id = ? ORDER BY created_at ASC`;
+      const messages = await mysql.query(sql, [room_id]);
+
+      io.to(room_id).emit("get_messages", messages);
     });
 
     // send message to chat
