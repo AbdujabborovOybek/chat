@@ -21,10 +21,15 @@ const socket = (io) => {
         const { from = null, to = null } = data;
         if (!from || !to) return;
 
-        let sql = `SELECT * FROM chats WHERE from_user_id = ? AND to_user_id = ? OR from_user_id = ? AND to_user_id = ?`;
-        const chat = await mysql.query(sql, [from, to, to, from]);
+        let sql = `SELECT * FROM chats WHERE from_user_id = ? AND to_user_id = ?`;
+        const chat1 = await mysql.query(sql, [from, to]);
 
-        if (!chat.length) {
+        sql = `SELECT * FROM chats WHERE from_user_id = ? AND to_user_id = ?`;
+        const chat2 = await mysql.query(sql, [to, from]);
+
+        const foundChat = chat1.concat(chat2);
+
+        if (!foundChat.length) {
           const newChat = {
             id: uuidv4(),
             from_user_id: from,
