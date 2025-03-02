@@ -21,7 +21,7 @@ const socket = (io) => {
         const { from = null, to = null } = data;
         if (!from || !to) return;
 
-        let sql = `SELECT * FROM chats WHERE (from_user_id = ? AND to_user_id = ?) OR (from_user_id = ? AND to_user_id = ?) LIMIT 1`;
+        let sql = `SELECT * FROM chats WHERE from_user_id = ? AND to_user_id = ? OR from_user_id = ? AND to_user_id = ?`;
         const chat = await mysql.query(sql, [from, to, to, from]);
 
         if (!chat.length) {
