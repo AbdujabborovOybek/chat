@@ -13,7 +13,7 @@ export const Verify = () => {
 
     const options = {
       method: "POST",
-      url: "http://localhost:8080/api/auth/verify",
+      url: "https://chat.abdujabborov.uz/api/auth/verify",
       data: { code },
     };
 
@@ -22,7 +22,7 @@ export const Verify = () => {
 
       const message = data.message.message;
       enqueueSnackbar(message, { variant: "success" });
-      localStorage.setItem("token", data?.innerData);
+      localStorage.setItem("user", JSON.stringify(data?.message?.data));
       return naivgate("/");
     } catch (error) {
       enqueueSnackbar(error.response.data.message, { variant: "info" });

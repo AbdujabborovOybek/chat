@@ -1,8 +1,8 @@
 import { Outlet, useLocation, Navigate } from "react-router-dom";
 
 export const Auth = () => {
-  const auth = localStorage.getItem("token");
+  const user = localStorage.getItem("user");
   const location = useLocation();
-  if (auth) return <Outlet />;
+  if (user) return <Outlet />;
   return <Navigate to="/login" state={{ from: location.pathname }} />;
 };

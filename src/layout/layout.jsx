@@ -4,14 +4,16 @@ import { io } from "socket.io-client";
 import { useEffect, useState } from "react";
 
 export const Layout = () => {
-  const socket = io("http://localhost:8080", { transports: ["websocket"] });
+  const socket = io("https://chat.abdujabborov.uz/", {
+    transports: ["websocket"],
+  });
   const [users, setUsers] = useState(null);
   const navigate = useNavigate();
 
   useEffect(() => {
     socket.emit("users");
     socket.on("users", (users) => setUsers(users));
-  }, []);
+  }, [socket]);
 
   const openChat = (id) => {
     navigate(`/chat/${id}`);

@@ -13,10 +13,9 @@ export const Login = () => {
 
     const options = {
       method: "POST",
-      url: "http://localhost:8080/api/auth/login",
+      url: "https://chat.abdujabborov.uz/api/auth/login",
       data: { phone },
     };
-    // 90 695 7132
 
     try {
       const { data } = await axios(options);
