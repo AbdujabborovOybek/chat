@@ -10,7 +10,7 @@ const socketService = require("./socket");
 const app = express();
 app.use(
   cors({
-    origin: ["http://localhost:3000", "https://chat-plum-xi.vercel.app"],
+    origin: ["http://localhost:3000", "https://chat-wp9l.vercel.app"],
     credentials: true,
   })
 );
