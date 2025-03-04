@@ -40,8 +40,8 @@ const socket = (io) => {
           client.join(newChat.id);
           client.emit("get_room", newChat.id);
         } else {
-          client.join(chat[0].id);
-          client.emit("get_room", chat[0].id);
+          client.join(foundChat[0].id);
+          client.emit("get_room", foundChat[0].id);
         }
       } catch (error) {
         console.error("Error in get_room:", error);

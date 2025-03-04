@@ -47,37 +47,93 @@ class authService {
         msg = "Tasdiqlash kodi noto'g'ri";
         if (!result.length) return resolve({ status: "warning", message: msg });
 
-        const set = { id: uuidv4(), phone: result[0].phone };
-        sql = "INSERT IGNORE INTO users SET ?";
-        await mysql.query(sql, [set]);
+        if (result[0].action === "login") {
+          sql = "SELECT * FROM users WHERE phone = ?";
+          result = await mysql.query(sql, [result[0].phone]);
 
-        sql = "DELETE FROM verification WHERE code = ?";
-        await mysql.query(sql, [req.body.code]);
+          if (!result.length) {
+            msg = "Foydalanuvchi topilmadi";
+            return resolve({ status: "warning", message: msg });
+          }
 
-        const access = jwt.generate({ id: set.id }, "access", "1h");
-        res.cookie("access", access, {
-          path: "/",
-          httpOnly: true,
-          secure: true,
-          sameSite: "none",
-          maxAge: 1000 * 60 * 60,
-        });
+          sql = "DELETE FROM verification WHERE code = ?";
+          await mysql.query(sql, [req.body.code]);
 
-        const refresh = jwt.generate({ id: set.id }, "refresh", "7d");
-        res.cookie("refresh", refresh, {
-          path: "/",
-          httpOnly: true,
-          secure: true,
-          sameSite: "none",
-          maxAge: 1000 * 60 * 60 * 24 * 7,
-        });
+          const access = jwt.generate({ id: result[0].id }, "access", "1h");
+          res.cookie("access", access, {
+            path: "/",
+            httpOnly: true,
+            secure: true,
+            sameSite: "none",
+            maxAge: 1000 * 60 * 60,
+          });
 
-        sql = "SELECT * FROM users";
-        result = await mysql.query(sql);
-        io.emit("users", result);
+          const refresh = jwt.generate({ id: result[0].id }, "refresh", "7d");
+          res.cookie("refresh", refresh, {
+            path: "/",
+            httpOnly: true,
+            secure: true,
+            sameSite: "none",
+            maxAge: 1000 * 60 * 60 * 24 * 7,
+          });
 
-        msg = "Real-Time Chat dasturiga xush kelibsiz";
-        resolve({ status: "success", message: msg, data: set });
+          const token = jwt.generate({ id: result[0].id }, "token", "30d");
+
+          msg = "Real-Time Chat dasturiga xush kelibsiz";
+          return resolve({
+            status: "success",
+            message: msg,
+            data: {
+              user: result[0],
+              token: token,
+            },
+          });
+        }
+
+        if (result[0].action === "register") {
+          const set = { id: uuidv4(), phone: result[0].phone };
+          sql = "INSERT IGNORE INTO users SET ?";
+          await mysql.query(sql, [set]);
+
+          sql = "DELETE FROM verification WHERE code = ?";
+          await mysql.query(sql, [req.body.code]);
+
+          const access = jwt.generate({ id: set.id }, "access", "1h");
+          res.cookie("access", access, {
+            path: "/",
+            httpOnly: true,
+            secure: true,
+            sameSite: "none",
+            maxAge: 1000 * 60 * 60,
+          });
+
+          const refresh = jwt.generate({ id: set.id }, "refresh", "7d");
+          res.cookie("refresh", refresh, {
+            path: "/",
+            httpOnly: true,
+            secure: true,
+            sameSite: "none",
+            maxAge: 1000 * 60 * 60 * 24 * 7,
+          });
+
+          sql = "SELECT * FROM users";
+          result = await mysql.query(sql);
+          io.emit("users", result);
+
+          const token = jwt.generate({ id: result[0].id }, "token", "30d");
+
+          msg = "Real-Time Chat dasturiga xush kelibsiz";
+          resolve({
+            status: "success",
+            message: msg,
+            data: {
+              user: set,
+              token: token,
+            },
+          });
+        }
+
+        resolve({ status: "warning", message: msg });
       } catch (error) {
         console.log(error);
         reject(error);
