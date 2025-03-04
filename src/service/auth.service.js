@@ -23,8 +23,8 @@ class authService {
         sql = "INSERT INTO verification SET ? ON DUPLICATE KEY UPDATE ?";
         await mysql.query(sql, [set, set]);
 
-        // msg = `Real-Time Chat dasturiga kirish uchun kod: ${code}`;
-        // await sms.verify(msg, req.body.phone);
+        msg = `Real-Time Chat dasturiga kirish uchun kod: ${code}`;
+        await sms.verify(msg, req.body.phone);
 
         msg = `Tasdiqlash kodi ${req.body.phone} raqamiga yuborildi`;
         resolve({ status: "success", message: msg });
