@@ -17,6 +17,7 @@ export const Chat = () => {
   const [messages, setMessages] = useState([]);
 
   useEffect(() => {
+    setMessages([]);
     const chatOptions = { from: user.id, to: id };
     socket.emit("get_room", chatOptions);
 
