@@ -20,9 +20,10 @@ export const Verify = () => {
     try {
       const { data } = await axios(options);
 
-      const message = data.message.message;
+      const message = data.message;
       enqueueSnackbar(message, { variant: "success" });
-      localStorage.setItem("user", JSON.stringify(data?.message?.data));
+      localStorage.setItem("user", JSON.stringify(data?.innerData?.user));
+      localStorage.setItem("token", data?.innerData?.token);
       return naivgate("/");
     } catch (error) {
       enqueueSnackbar(error.response.data.message, { variant: "info" });
