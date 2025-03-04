@@ -59,7 +59,11 @@ class authService {
           sql = "DELETE FROM verification WHERE code = ?";
           await mysql.query(sql, [req.body.code]);
 
-          const access = jwt.generate({ id: result[0].id }, "access", "1h");
+          const access = await jwt.generate(
+            { id: result[0].id },
+            "access",
+            "1h"
+          );
           res.cookie("access", access, {
             path: "/",
             httpOnly: true,
@@ -68,7 +72,11 @@ class authService {
             maxAge: 1000 * 60 * 60,
           });
 
-          const refresh = jwt.generate({ id: result[0].id }, "refresh", "7d");
+          const refresh = await jwt.generate(
+            { id: result[0].id },
+            "refresh",
+            "7d"
+          );
           res.cookie("refresh", refresh, {
             path: "/",
             httpOnly: true,
@@ -77,7 +85,7 @@ class authService {
             maxAge: 1000 * 60 * 60 * 24 * 7,
           });
 
-          const token = jwt.generate({ id: result[0].id }, "token", "30d");
+          const token = await jwt.generate({ id: result[0].id }, "token");
 
           msg = "Real-Time Chat dasturiga xush kelibsiz";
           return resolve({
@@ -98,7 +106,7 @@ class authService {
           sql = "DELETE FROM verification WHERE code = ?";
           await mysql.query(sql, [req.body.code]);
 
-          const access = jwt.generate({ id: set.id }, "access", "1h");
+          const access = await jwt.generate({ id: set.id }, "access", "1h");
           res.cookie("access", access, {
             path: "/",
             httpOnly: true,
@@ -107,7 +115,7 @@ class authService {
             maxAge: 1000 * 60 * 60,
           });
 
-          const refresh = jwt.generate({ id: set.id }, "refresh", "7d");
+          const refresh = await jwt.generate({ id: set.id }, "refresh", "7d");
           res.cookie("refresh", refresh, {
             path: "/",
             httpOnly: true,
@@ -120,14 +128,18 @@ class authService {
           result = await mysql.query(sql);
           io.emit("users", result);
 
-          const token = jwt.generate({ id: result[0].id }, "token", "30d");
+          const token = await jwt.generate({ id: result[0].id }, "token");
+
+          sql = "SELECT * FROM users WHERE id = ?";
+          result = await mysql.query(sql, [set.id]);
+          const user = result[0];
 
           msg = "Real-Time Chat dasturiga xush kelibsiz";
           resolve({
             status: "success",
             message: msg,
             data: {
-              user: set,
+              user: user,
               token: token,
             },
           });

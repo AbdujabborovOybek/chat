@@ -25,10 +25,7 @@ class jwtHelper {
         }
 
         if (type === "token") {
-          const token = jwt.sign(payload, key, {
-            expiresIn: exp,
-            algorithm: "HS256",
-          });
+          const token = jwt.sign(payload, key);
           return resolve(token);
         }
 

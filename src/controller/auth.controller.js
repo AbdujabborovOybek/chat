@@ -14,7 +14,7 @@ class authController {
   async verify(req, res) {
     try {
       const result = await authService.verify(req, res);
-      response[result.status](res, result);
+      response[result.status](res, result.message, result.data);
     } catch (error) {
       response.serverError(res, "Internal server error");
     }
