@@ -61,7 +61,7 @@ export const Chat = () => {
           <li
             key={index}
             className={`chat-list-item ${
-              msg.from_user_id === user.id
+              msg.from_user_id !== user.id
                 ? "chat-list-item--i"
                 : "chat-list-item--it"
             }`}
