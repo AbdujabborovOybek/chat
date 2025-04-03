@@ -50,6 +50,10 @@
   cursor: pointer;
 }
 
+.user_list > li.active {
+  background: #f25f5c;
+}
+
 .user_list > li > img {
   width: 50px;
   height: 50px;

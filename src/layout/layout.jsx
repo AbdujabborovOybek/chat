@@ -1,5 +1,5 @@
 import "./layout.css";
-import { Outlet, useNavigate } from "react-router-dom";
+import { Outlet, useNavigate, useParams } from "react-router-dom";
 import { io } from "socket.io-client";
 import { useEffect, useState } from "react";
 
@@ -12,6 +12,7 @@ export const Layout = () => {
   });
   const [users, setUsers] = useState(null);
   const navigate = useNavigate();
+  const { id: activUser } = useParams();
 
   useEffect(() => {
     socket.emit("users");
@@ -35,7 +36,7 @@ export const Layout = () => {
           {users?.map((user) => (
             <li
               key={user.id}
-              className="user"
+              className={`user ${activUser === user.id ? "active" : ""}`}
               onClick={() => openChat(user.id)}
             >
               <img
@@ -59,8 +60,3 @@ export const Layout = () => {
     </main>
   );
 };
-
-// created_at: "2025-02-18T12:04:22.000Z";
-// fullanme: null;
-// id: "2690ef69-cb78-4385-84cb-cf3db54bee54";
-// phone: "+998 90 695 7132";
