@@ -3,6 +3,7 @@ const crypto = require("crypto");
 const mysql = require("../utils/mysql2.helper");
 const { v4: uuidv4 } = require("uuid");
 const jwt = require("../utils/jwt.helper");
+const redisClient = require("../config/redis");
 
 class authService {
   async login(req, res) {
@@ -126,6 +127,9 @@ class authService {
 
           sql = "SELECT * FROM users";
           result = await mysql.query(sql);
+          await redisClient.set("rtch_users", JSON.stringify(result), {
+            EX: 300,
+          });
           io.emit("users", result);
 
           const token = await jwt.generate({ id: result[0].id }, "token");
